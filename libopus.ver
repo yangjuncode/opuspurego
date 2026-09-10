@@ -1,0 +1,4 @@
+{
+    global: opus_*;
+    local: *;
+};
