@@ -97,22 +97,24 @@ func (e *Encoder) get(request int32) (int, error) {
 	runtime.KeepAlive(e)
 	return int(value), err
 }
-func (e *Encoder) SetBitrate(bps int) error      { return e.set(4002, bps) }
-func (e *Encoder) Bitrate() (int, error)         { return e.get(4003) }
-func (e *Encoder) SetComplexity(value int) error { return e.set(4010, value) }
-func (e *Encoder) Complexity() (int, error)      { return e.get(4011) }
+func (e *Encoder) SetBitrate(bps int) error      { return e.set(ctlSetBitrateRequest, bps) }
+func (e *Encoder) Bitrate() (int, error)         { return e.get(ctlGetBitrateRequest) }
+func (e *Encoder) SetComplexity(value int) error { return e.set(ctlSetComplexityRequest, value) }
+func (e *Encoder) Complexity() (int, error)      { return e.get(ctlGetComplexityRequest) }
 func boolInt(v bool) int {
 	if v {
 		return 1
 	}
 	return 0
 }
-func (e *Encoder) SetVBR(v bool) error                  { return e.set(4006, boolInt(v)) }
-func (e *Encoder) SetInBandFEC(v bool) error            { return e.set(4012, boolInt(v)) }
-func (e *Encoder) SetPacketLossPercent(value int) error { return e.set(4014, value) }
-func (e *Encoder) SetDTX(v bool) error                  { return e.set(4016, boolInt(v)) }
-func (e *Encoder) Lookahead() (int, error)              { return e.get(4027) }
-func (e *Encoder) Reset() error                         { return e.set(4028, 0) }
+func (e *Encoder) SetVBR(v bool) error       { return e.set(ctlSetVBRRequest, boolInt(v)) }
+func (e *Encoder) SetInBandFEC(v bool) error { return e.set(ctlSetInbandFECRequest, boolInt(v)) }
+func (e *Encoder) SetPacketLossPercent(value int) error {
+	return e.set(ctlSetPacketLossPercRequest, value)
+}
+func (e *Encoder) SetDTX(v bool) error     { return e.set(ctlSetDTXRequest, boolInt(v)) }
+func (e *Encoder) Lookahead() (int, error) { return e.get(ctlGetLookaheadRequest) }
+func (e *Encoder) Reset() error            { return e.set(ctlResetState, 0) }
 func (e *Encoder) Close() error {
 	if e == nil {
 		return nil

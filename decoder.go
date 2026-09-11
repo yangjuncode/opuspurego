@@ -79,7 +79,7 @@ func (d *Decoder) Reset() error {
 	if d.ptr == 0 {
 		return ErrClosed
 	}
-	_, err := nativeStatus("decoder_ctl", d.library.fn.decoderSet(d.ptr, 4028, 0))
+	_, err := nativeStatus("decoder_ctl", d.library.fn.decoderSet(d.ptr, ctlResetState, 0))
 	runtime.KeepAlive(d)
 	return err
 }
